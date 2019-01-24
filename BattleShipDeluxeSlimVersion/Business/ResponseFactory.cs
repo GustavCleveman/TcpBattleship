@@ -13,11 +13,21 @@ namespace BattleShipDeluxeSlimVersion.Business
 
         public static Message BuildResponse(string request, Game game, bool isHost)
         {
+
             Message response = new Message
             {
                 //unless changed later always false
                 MessageLedToGameEnd = false,
             };
+
+            if (request.Length < 4 && isHost)
+            {
+
+                response.Text = "500 Syntax Error";
+                game.BadRequests++;
+                return response;
+
+            }
 
             if (request.Trim() == "")
             {
@@ -26,7 +36,7 @@ namespace BattleShipDeluxeSlimVersion.Business
                 return response;
             }
             if (!isHost) { return ClientResponses(request, game); }
-            
+
             //DOUBLE MAKE SURE NO SPACES
             #region word splitters
             request = request.Trim();
@@ -126,7 +136,7 @@ namespace BattleShipDeluxeSlimVersion.Business
                     return response;
                 }
 
-                response.Text = "500 Syntax Error";                
+                response.Text = "500 Syntax Error";
                 return response;
             }
 
@@ -174,7 +184,7 @@ namespace BattleShipDeluxeSlimVersion.Business
         {
             //Stop it, Get some help... - Michael B Jordan
             return "**A\n" +
-                "Write QUIT to terminate connection.\n"+
+                "Write QUIT to terminate connection.\n" +
                 "Write Fire<Coordinate> to fire.\n" +
                 "IF opponent misses your boats, write '230 <Message>'.\n" +
                 "If your opponent HIT your Carrier, write '241 <Message>'.\n" +
@@ -292,11 +302,11 @@ namespace BattleShipDeluxeSlimVersion.Business
                 game.BadRequests++;
                 if (game.BadRequests > 2)
                 {
-                    returnMessage.Text = "270 Hasta la vista!";                    
+                    returnMessage.Text = "270 Hasta la vista!";
                 }
-                
+
                 returnMessage.Text = "501 Sequence Order";
-                
+
             }
             return returnMessage;
         }
