@@ -22,9 +22,15 @@ namespace BattleShipDeluxeSlimVersion.Business
 
             if (request.Length < 4 && isHost)
             {
-
-                response.Text = "500 Syntax Error";
                 game.BadRequests++;
+                if (game.BadRequests > 2)
+                {
+                    response.Text = "270 Hasta la vista!";
+                    response.MessageLedToGameEnd = true;
+                    game.ResetBadRequest();
+                    return response;
+                }
+                response.Text = "500 Syntax Error";
                 return response;
 
             }

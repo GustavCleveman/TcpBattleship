@@ -110,6 +110,7 @@ namespace BattleShipDeluxeSlimVersion
         }
         private void DrawFrameClientTurn(string request, string response)
         {
+            request += "      ";
             Console.Clear();
             game.Draw();
             if (request.ToUpper().Substring(0, 4) == "HELP")
